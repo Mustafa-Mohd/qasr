@@ -5,9 +5,10 @@ import { useTheme } from "@/hooks/useTheme";
 
 const LINKS = [
   { to: "/", label: "Dashboard" },
-  { to: "/guide", label: "Prayer Guide" },
-  { to: "/scenarios", label: "Scenarios" },
-  { to: "/kalimas", label: "Kalimas" },
+  { to: "/guide", label: "Guide" },
+  { to: "/names", label: "99 Names" },
+  { to: "/duas", label: "Duas" },
+  { to: "/tasbih", label: "Tasbih" },
   { to: "/knowledge", label: "Knowledge" },
 ];
 

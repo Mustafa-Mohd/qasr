@@ -33,7 +33,7 @@ const currentIcon = new L.Icon({
 });
 
 // Component to handle map view updates
-function MapUpdater({ home, current }: { home: Coords | null, current: Coords | null }) {
+function MapUpdater({ home, current, initialCenter }: { home: Coords | null, current: Coords | null, initialCenter: [number, number] }) {
   const map = useMap();
   
   useEffect(() => {
@@ -47,8 +47,10 @@ function MapUpdater({ home, current }: { home: Coords | null, current: Coords | 
       map.setView([home.lat, home.lng], 13);
     } else if (current) {
       map.setView([current.lat, current.lng], 13);
+    } else {
+      map.setView(initialCenter, 5);
     }
-  }, [home, current, map]);
+  }, [home, current, initialCenter, map]);
 
   return null;
 }
@@ -58,6 +60,20 @@ export function MapLocationPicker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [initialCenter, setInitialCenter] = useState<[number, number]>([21.4225, 39.8262]);
+
+  useEffect(() => {
+    if (!home && !current) {
+      fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+          if (data.latitude && data.longitude) {
+            setInitialCenter([data.latitude, data.longitude]);
+          }
+        })
+        .catch(() => {}); // silent fail, keep Makkah fallback
+    }
+  }, [home, current]);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -109,7 +125,7 @@ export function MapLocationPicker() {
   const polylinePositions: [number, number][] = 
     (home && current) ? [[home.lat, home.lng], [current.lat, current.lng]] : [];
 
-  const defaultCenter: [number, number] = home ? [home.lat, home.lng] : current ? [current.lat, current.lng] : [21.4225, 39.8262]; // Default to Makkah
+  const defaultCenter: [number, number] = home ? [home.lat, home.lng] : current ? [current.lat, current.lng] : initialCenter;
 
   return (
     <div className="flex flex-col gap-4">
@@ -162,7 +178,7 @@ export function MapLocationPicker() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           />
-          <MapUpdater home={home} current={current} />
+          <MapUpdater home={home} current={current} initialCenter={initialCenter} />
           
           {home && (
             <Marker position={[home.lat, home.lng]} icon={homeIcon}>

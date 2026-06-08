@@ -9,13 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScenariosRouteImport } from './routes/scenarios'
+import { Route as NamesRouteImport } from './routes/names'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as KalimasRouteImport } from './routes/kalimas'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as DuasRouteImport } from './routes/duas'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TasbihRoute = TasbihRouteImport.update({
+  id: '/tasbih',
+  path: '/tasbih',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -24,6 +32,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ScenariosRoute = ScenariosRouteImport.update({
   id: '/scenarios',
   path: '/scenarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NamesRoute = NamesRouteImport.update({
+  id: '/names',
+  path: '/names',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KnowledgeRoute = KnowledgeRouteImport.update({
@@ -41,6 +54,11 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DuasRoute = DuasRouteImport.update({
+  id: '/duas',
+  path: '/duas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,61 +67,95 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
+  '/names': typeof NamesRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tasbih': typeof TasbihRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
+  '/names': typeof NamesRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tasbih': typeof TasbihRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
+  '/names': typeof NamesRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tasbih': typeof TasbihRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/duas'
     | '/guide'
     | '/kalimas'
     | '/knowledge'
+    | '/names'
     | '/scenarios'
     | '/sitemap.xml'
+    | '/tasbih'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/guide' | '/kalimas' | '/knowledge' | '/scenarios' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/duas'
+    | '/guide'
+    | '/kalimas'
+    | '/knowledge'
+    | '/names'
+    | '/scenarios'
+    | '/sitemap.xml'
+    | '/tasbih'
   id:
     | '__root__'
     | '/'
+    | '/duas'
     | '/guide'
     | '/kalimas'
     | '/knowledge'
+    | '/names'
     | '/scenarios'
     | '/sitemap.xml'
+    | '/tasbih'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DuasRoute: typeof DuasRoute
   GuideRoute: typeof GuideRoute
   KalimasRoute: typeof KalimasRoute
   KnowledgeRoute: typeof KnowledgeRoute
+  NamesRoute: typeof NamesRoute
   ScenariosRoute: typeof ScenariosRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TasbihRoute: typeof TasbihRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tasbih': {
+      id: '/tasbih'
+      path: '/tasbih'
+      fullPath: '/tasbih'
+      preLoaderRoute: typeof TasbihRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -116,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/scenarios'
       fullPath: '/scenarios'
       preLoaderRoute: typeof ScenariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/names': {
+      id: '/names'
+      path: '/names'
+      fullPath: '/names'
+      preLoaderRoute: typeof NamesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge': {
@@ -139,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/duas': {
+      id: '/duas'
+      path: '/duas'
+      fullPath: '/duas'
+      preLoaderRoute: typeof DuasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,11 +217,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DuasRoute: DuasRoute,
   GuideRoute: GuideRoute,
   KalimasRoute: KalimasRoute,
   KnowledgeRoute: KnowledgeRoute,
+  NamesRoute: NamesRoute,
   ScenariosRoute: ScenariosRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TasbihRoute: TasbihRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
