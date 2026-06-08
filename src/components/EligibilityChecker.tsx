@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   MapPin,
   Home,
@@ -44,6 +45,7 @@ export function EligibilityChecker() {
     result,
   } = useQasr();
   const rule = MADHABS[madhab];
+  const [targetMode, setTargetMode] = useState<'self' | 'other'>('self');
 
   return (
     <div className="rounded-3xl border border-border bg-card p-5 shadow-elegant sm:p-7">
@@ -53,8 +55,27 @@ export function EligibilityChecker() {
         </span>
         <div>
           <h2 className="font-display text-xl">Qasr Eligibility Checker</h2>
-          <p className="text-sm text-muted-foreground">Can you pray Qasr & Jamak right now?</p>
+          <p className="text-sm text-muted-foreground">Check rulings based on travel distance</p>
         </div>
+      </div>
+
+      <div className="mb-5 flex rounded-xl border border-border p-1 bg-secondary/30">
+        <button
+          onClick={() => setTargetMode('self')}
+          className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+            targetMode === 'self' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Check for Myself
+        </button>
+        <button
+          onClick={() => setTargetMode('other')}
+          className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+            targetMode === 'other' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Check for Someone Else
+        </button>
       </div>
 
       <div className="mb-5">
@@ -63,7 +84,7 @@ export function EligibilityChecker() {
       </div>
 
       <div className="mb-5">
-        <MapLocationPicker />
+        <MapLocationPicker mode={targetMode} />
       </div>
 
       <div className="mb-5">
@@ -89,7 +110,9 @@ export function EligibilityChecker() {
 
       {!result && (
         <div className="rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          Set your home location and detect your current location to see your ruling.
+          {targetMode === 'self' 
+            ? "Set your home location and detect your current location to see your ruling."
+            : "Search their Home and Destination locations to see their ruling."}
         </div>
       )}
 
@@ -122,7 +145,9 @@ export function EligibilityChecker() {
                 : "bg-secondary text-secondary-foreground"
             }`}
           >
-            {result.isTraveler ? "You are a Traveler (Musafir) ✈️" : "You are a Resident (Muqim) 🏠"}
+            {targetMode === 'self'
+              ? (result.isTraveler ? "You are a Traveler (Musafir) ✈️" : "You are a Resident (Muqim) 🏠")
+              : (result.isTraveler ? "They are a Traveler (Musafir) ✈️" : "They are a Resident (Muqim) 🏠")}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">

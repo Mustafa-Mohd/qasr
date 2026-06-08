@@ -32,7 +32,6 @@ const currentIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-// Component to handle map view updates
 function MapUpdater({ home, current, initialCenter }: { home: Coords | null, current: Coords | null, initialCenter: [number, number] }) {
   const map = useMap();
   
@@ -55,25 +54,20 @@ function MapUpdater({ home, current, initialCenter }: { home: Coords | null, cur
   return null;
 }
 
-export function MapLocationPicker() {
-  const { home, current, setHomeExplicitly, detectCurrent, loadingLocation } = useQasr();
+const formatPhotonResult = (properties: any) => {
+  const parts = [
+    properties.name,
+    properties.city || properties.town || properties.village,
+    properties.state,
+    properties.country
+  ].filter(Boolean);
+  return Array.from(new Set(parts)).join(", ");
+};
+
+function LocationSearchInput({ placeholder, onSelect }: { placeholder: string, onSelect: (c: Coords) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [initialCenter, setInitialCenter] = useState<[number, number]>([21.4225, 39.8262]);
-
-  useEffect(() => {
-    if (!home && !current) {
-      fetch('https://ipapi.co/json/')
-        .then(res => res.json())
-        .then(data => {
-          if (data.latitude && data.longitude) {
-            setInitialCenter([data.latitude, data.longitude]);
-          }
-        })
-        .catch(() => {}); // silent fail, keep Makkah fallback
-    }
-  }, [home, current]);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -101,19 +95,9 @@ export function MapLocationPicker() {
     e.preventDefault();
   };
 
-  const formatPhotonResult = (properties: any) => {
-    const parts = [
-      properties.name,
-      properties.city || properties.town || properties.village,
-      properties.state,
-      properties.country
-    ].filter(Boolean);
-    return Array.from(new Set(parts)).join(", ");
-  };
-
   const selectResult = (result: any) => {
     const [lon, lat] = result.geometry.coordinates;
-    setHomeExplicitly({
+    onSelect({
       lat,
       lng: lon,
       label: formatPhotonResult(result.properties)
@@ -122,6 +106,59 @@ export function MapLocationPicker() {
     setSearchQuery("");
   };
 
+  return (
+    <div className="relative flex-1">
+      <form onSubmit={handleSearch} className="flex relative">
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full rounded-xl border border-border bg-secondary/50 px-4 py-2.5 pl-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <button 
+          type="submit" 
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+          disabled={isSearching || !searchQuery.trim()}
+        >
+          {isSearching ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Search'}
+        </button>
+      </form>
+      {searchResults.length > 0 && (
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-card shadow-lg">
+          {searchResults.map((res, i) => (
+            <button
+              key={i}
+              className="w-full border-b border-border/50 px-4 py-3 text-left text-sm hover:bg-secondary/50 last:border-0"
+              onClick={() => selectResult(res)}
+            >
+              {formatPhotonResult(res.properties)}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function MapLocationPicker({ mode }: { mode: 'self' | 'other' }) {
+  const { home, current, setHomeExplicitly, setCurrentExplicitly, detectCurrent, loadingLocation } = useQasr();
+  const [initialCenter, setInitialCenter] = useState<[number, number]>([21.4225, 39.8262]);
+
+  useEffect(() => {
+    if (!home && !current) {
+      fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+          if (data.latitude && data.longitude) {
+            setInitialCenter([data.latitude, data.longitude]);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [home, current]);
+
   const polylinePositions: [number, number][] = 
     (home && current) ? [[home.lat, home.lng], [current.lat, current.lng]] : [];
 
@@ -129,48 +166,24 @@ export function MapLocationPicker() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <form onSubmit={handleSearch} className="flex relative">
-            <input
-              type="text"
-              placeholder="Search for your home location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-border bg-secondary/50 px-4 py-2.5 pl-10 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <button 
-              type="submit" 
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
-              disabled={isSearching || !searchQuery.trim()}
-            >
-              {isSearching ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Search'}
-            </button>
-          </form>
-          {searchResults.length > 0 && (
-            <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-card shadow-lg">
-              {searchResults.map((res, i) => (
-                <button
-                  key={i}
-                  className="w-full border-b border-border/50 px-4 py-3 text-left text-sm hover:bg-secondary/50 last:border-0"
-                  onClick={() => selectResult(res)}
-                >
-                  {formatPhotonResult(res.properties)}
-                </button>
-              ))}
-            </div>
-          )}
+      {mode === 'self' ? (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <LocationSearchInput placeholder="Search for your home location..." onSelect={setHomeExplicitly} />
+          <button
+            onClick={detectCurrent}
+            disabled={loadingLocation}
+            className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-gold px-4 py-2.5 text-sm font-semibold text-gold-foreground hover:opacity-90 disabled:opacity-60 whitespace-nowrap shadow-gold"
+          >
+            {loadingLocation ? <Loader2 className="h-4 w-4 animate-spin" /> : <Navigation className="h-4 w-4" />}
+            Detect Current
+          </button>
         </div>
-        <button
-          onClick={detectCurrent}
-          disabled={loadingLocation}
-          className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-gold px-4 py-2.5 text-sm font-semibold text-gold-foreground hover:opacity-90 disabled:opacity-60 whitespace-nowrap shadow-gold"
-        >
-          {loadingLocation ? <Loader2 className="h-4 w-4 animate-spin" /> : <Navigation className="h-4 w-4" />}
-          Detect Current
-        </button>
-      </div>
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <LocationSearchInput placeholder="Search their Home location..." onSelect={setHomeExplicitly} />
+          <LocationSearchInput placeholder="Search their Destination..." onSelect={setCurrentExplicitly} />
+        </div>
+      )}
 
       <div className="h-[300px] w-full overflow-hidden rounded-2xl border border-border shadow-inner sm:h-[400px] relative z-0">
         <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%", zIndex: 0 }}>
