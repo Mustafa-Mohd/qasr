@@ -13,6 +13,7 @@ import { useQasr } from "@/hooks/useQasr";
 import { MADHABS } from "@/lib/madhab";
 import { formatDistance } from "@/lib/geo";
 import { MadhabSelector } from "./MadhabSelector";
+import { MapLocationPicker } from "./MapLocationPicker";
 
 function StatusPill({ ok, label }: { ok: boolean; label: string }) {
   return (
@@ -36,17 +37,11 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
 
 export function EligibilityChecker() {
   const {
-    home,
-    current,
     madhab,
     stayDays,
     setStayDays,
-    loadingLocation,
     error,
     result,
-    detectCurrent,
-    saveHomeFromCurrent,
-    clearHome,
   } = useQasr();
   const rule = MADHABS[madhab];
 
@@ -67,49 +62,8 @@ export function EligibilityChecker() {
         <MadhabSelector />
       </div>
 
-      <div className="mb-5 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-secondary/40 p-4">
-          <div className="mb-1 flex items-center gap-2 text-sm font-semibold">
-            <Home className="h-4 w-4 text-primary" /> Home location
-          </div>
-          <p className="truncate text-sm text-muted-foreground">
-            {home?.label ?? (home ? `${home.lat.toFixed(2)}, ${home.lng.toFixed(2)}` : "Not set yet")}
-          </p>
-          <div className="mt-3 flex gap-2">
-            <button
-              onClick={saveHomeFromCurrent}
-              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
-            >
-              {home ? "Update home" : "Set as home"}
-            </button>
-            {home && (
-              <button
-                onClick={clearHome}
-                className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
-              >
-                <RotateCcw className="h-3 w-3" /> Clear
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-border bg-secondary/40 p-4">
-          <div className="mb-1 flex items-center gap-2 text-sm font-semibold">
-            <MapPin className="h-4 w-4 text-gold" /> Current location
-          </div>
-          <p className="truncate text-sm text-muted-foreground">
-            {current?.label ??
-              (current ? `${current.lat.toFixed(2)}, ${current.lng.toFixed(2)}` : "Tap detect")}
-          </p>
-          <button
-            onClick={detectCurrent}
-            disabled={loadingLocation}
-            className="mt-3 flex items-center gap-1.5 rounded-lg bg-gradient-gold px-3 py-1.5 text-xs font-semibold text-gold-foreground hover:opacity-90 disabled:opacity-60"
-          >
-            {loadingLocation ? <Loader2 className="h-3 w-3 animate-spin" /> : <Navigation className="h-3 w-3" />}
-            Detect my location
-          </button>
-        </div>
+      <div className="mb-5">
+        <MapLocationPicker />
       </div>
 
       <div className="mb-5">

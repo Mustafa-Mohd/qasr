@@ -18,6 +18,7 @@ interface QasrCtx {
   detectCurrent: () => Promise<void>;
   saveHomeFromCurrent: () => Promise<void>;
   clearHome: () => void;
+  setHomeExplicitly: (c: Coords) => void;
 }
 
 const Ctx = createContext<QasrCtx | null>(null);
@@ -70,6 +71,11 @@ export function QasrProvider({ children }: { children: ReactNode }) {
     setHomeState(null);
   };
 
+  const setHomeExplicitly = (c: Coords) => {
+    persistHome(c);
+    setHomeState(c);
+  };
+
   const setMadhab = (m: MadhabId) => {
     persistMadhab(m);
     setMadhabState(m);
@@ -95,6 +101,7 @@ export function QasrProvider({ children }: { children: ReactNode }) {
         detectCurrent,
         saveHomeFromCurrent,
         clearHome,
+        setHomeExplicitly,
       }}
     >
       {children}
