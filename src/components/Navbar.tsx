@@ -9,7 +9,10 @@ const LINKS = [
   { to: "/names", label: "99 Names" },
   { to: "/duas", label: "Duas" },
   { to: "/tasbih", label: "Tasbih" },
-  { to: "/knowledge", label: "Knowledge" },
+  { to: "/quran", label: "Quran" },
+  { to: "/zakat", label: "Zakat" },
+  { to: "/calendar", label: "Calendar" },
+  { to: "/qibla", label: "Qibla Map" },
 ];
 
 export function Navbar() {

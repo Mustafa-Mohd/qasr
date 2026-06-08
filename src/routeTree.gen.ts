@@ -9,16 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZakatRouteImport } from './routes/zakat'
 import { Route as TasbihRouteImport } from './routes/tasbih'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScenariosRouteImport } from './routes/scenarios'
+import { Route as QuranRouteImport } from './routes/quran'
+import { Route as QiblaRouteImport } from './routes/qibla'
 import { Route as NamesRouteImport } from './routes/names'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as KalimasRouteImport } from './routes/kalimas'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as DuasRouteImport } from './routes/duas'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ZakatRoute = ZakatRouteImport.update({
+  id: '/zakat',
+  path: '/zakat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TasbihRoute = TasbihRouteImport.update({
   id: '/tasbih',
   path: '/tasbih',
@@ -32,6 +41,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ScenariosRoute = ScenariosRouteImport.update({
   id: '/scenarios',
   path: '/scenarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuranRoute = QuranRouteImport.update({
+  id: '/quran',
+  path: '/quran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QiblaRoute = QiblaRouteImport.update({
+  id: '/qibla',
+  path: '/qibla',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NamesRoute = NamesRouteImport.update({
@@ -59,6 +78,11 @@ const DuasRoute = DuasRouteImport.update({
   path: '/duas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,88 +91,123 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
   '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/qibla': typeof QiblaRoute
+  '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tasbih': typeof TasbihRoute
+  '/zakat': typeof ZakatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
   '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/qibla': typeof QiblaRoute
+  '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tasbih': typeof TasbihRoute
+  '/zakat': typeof ZakatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
   '/duas': typeof DuasRoute
   '/guide': typeof GuideRoute
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/qibla': typeof QiblaRoute
+  '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tasbih': typeof TasbihRoute
+  '/zakat': typeof ZakatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/calendar'
     | '/duas'
     | '/guide'
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/qibla'
+    | '/quran'
     | '/scenarios'
     | '/sitemap.xml'
     | '/tasbih'
+    | '/zakat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/calendar'
     | '/duas'
     | '/guide'
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/qibla'
+    | '/quran'
     | '/scenarios'
     | '/sitemap.xml'
     | '/tasbih'
+    | '/zakat'
   id:
     | '__root__'
     | '/'
+    | '/calendar'
     | '/duas'
     | '/guide'
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/qibla'
+    | '/quran'
     | '/scenarios'
     | '/sitemap.xml'
     | '/tasbih'
+    | '/zakat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalendarRoute: typeof CalendarRoute
   DuasRoute: typeof DuasRoute
   GuideRoute: typeof GuideRoute
   KalimasRoute: typeof KalimasRoute
   KnowledgeRoute: typeof KnowledgeRoute
   NamesRoute: typeof NamesRoute
+  QiblaRoute: typeof QiblaRoute
+  QuranRoute: typeof QuranRoute
   ScenariosRoute: typeof ScenariosRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TasbihRoute: typeof TasbihRoute
+  ZakatRoute: typeof ZakatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/zakat': {
+      id: '/zakat'
+      path: '/zakat'
+      fullPath: '/zakat'
+      preLoaderRoute: typeof ZakatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tasbih': {
       id: '/tasbih'
       path: '/tasbih'
@@ -168,6 +227,20 @@ declare module '@tanstack/react-router' {
       path: '/scenarios'
       fullPath: '/scenarios'
       preLoaderRoute: typeof ScenariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quran': {
+      id: '/quran'
+      path: '/quran'
+      fullPath: '/quran'
+      preLoaderRoute: typeof QuranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qibla': {
+      id: '/qibla'
+      path: '/qibla'
+      fullPath: '/qibla'
+      preLoaderRoute: typeof QiblaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/names': {
@@ -205,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DuasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -217,14 +297,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalendarRoute: CalendarRoute,
   DuasRoute: DuasRoute,
   GuideRoute: GuideRoute,
   KalimasRoute: KalimasRoute,
   KnowledgeRoute: KnowledgeRoute,
   NamesRoute: NamesRoute,
+  QiblaRoute: QiblaRoute,
+  QuranRoute: QuranRoute,
   ScenariosRoute: ScenariosRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TasbihRoute: TasbihRoute,
+  ZakatRoute: ZakatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -16,6 +16,24 @@ export function haversineKm(a: Coords, b: Coords): number {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
+export function calculateDistanceAndBearing(a: Coords, b: Coords): { distance: number, bearing: number } {
+  const distance = haversineKm(a, b);
+  
+  const startLat = (a.lat * Math.PI) / 180;
+  const startLng = (a.lng * Math.PI) / 180;
+  const destLat = (b.lat * Math.PI) / 180;
+  const destLng = (b.lng * Math.PI) / 180;
+
+  const y = Math.sin(destLng - startLng) * Math.cos(destLat);
+  const x = Math.cos(startLat) * Math.sin(destLat) -
+            Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
+            
+  let bearing = (Math.atan2(y, x) * 180) / Math.PI;
+  bearing = (bearing + 360) % 360;
+
+  return { distance, bearing };
+}
+
 export function getCurrentPosition(): Promise<Coords> {
   return new Promise((resolve, reject) => {
     if (!("geolocation" in navigator)) {
