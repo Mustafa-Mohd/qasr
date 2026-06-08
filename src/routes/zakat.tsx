@@ -78,7 +78,7 @@ function ZakatPage() {
                 </div>
                 <div>
                   <label className="mb-1 flex items-center gap-1 text-sm font-medium text-muted-foreground">
-                    Nisab Value (85g Gold) <Info className="h-3 w-3" title="The minimum amount of wealth one must have before Zakat is payable." />
+                    Nisab Value (85g Gold) <span title="The minimum amount of wealth one must have before Zakat is payable."><Info className="h-3 w-3" /></span>
                   </label>
                   <input
                     type="number"
