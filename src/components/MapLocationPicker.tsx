@@ -168,20 +168,32 @@ export function MapLocationPicker({ mode }: { mode: 'self' | 'other' }) {
     <div className="flex flex-col gap-4">
       {mode === 'self' ? (
         <div className="flex flex-col sm:flex-row gap-3">
-          <LocationSearchInput placeholder="Search for your home location..." onSelect={setHomeExplicitly} />
-          <button
-            onClick={detectCurrent}
-            disabled={loadingLocation}
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-gold px-4 py-2.5 text-sm font-semibold text-gold-foreground hover:opacity-90 disabled:opacity-60 whitespace-nowrap shadow-gold"
-          >
-            {loadingLocation ? <Loader2 className="h-4 w-4 animate-spin" /> : <Navigation className="h-4 w-4" />}
-            Detect Current
-          </button>
+          <div className="flex-1 w-full">
+            <label className="mb-1.5 block text-sm font-semibold text-muted-foreground">From</label>
+            <LocationSearchInput placeholder="Search for your home location..." onSelect={setHomeExplicitly} />
+          </div>
+          <div className="flex flex-col justify-end w-full sm:w-auto">
+            <label className="mb-1.5 block text-sm font-semibold text-muted-foreground">To (Current)</label>
+            <button
+              onClick={detectCurrent}
+              disabled={loadingLocation}
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-gradient-gold px-6 py-[11px] text-sm font-semibold text-gold-foreground hover:opacity-90 disabled:opacity-60 whitespace-nowrap shadow-gold"
+            >
+              {loadingLocation ? <Loader2 className="h-4 w-4 animate-spin" /> : <Navigation className="h-4 w-4" />}
+              Detect Current
+            </button>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col sm:flex-row gap-3">
-          <LocationSearchInput placeholder="Search their Home location..." onSelect={setHomeExplicitly} />
-          <LocationSearchInput placeholder="Search their Destination..." onSelect={setCurrentExplicitly} />
+          <div className="flex-1 w-full">
+            <label className="mb-1.5 block text-sm font-semibold text-muted-foreground">From</label>
+            <LocationSearchInput placeholder="Search their Home location..." onSelect={setHomeExplicitly} />
+          </div>
+          <div className="flex-1 w-full">
+            <label className="mb-1.5 block text-sm font-semibold text-muted-foreground">To (Destination)</label>
+            <LocationSearchInput placeholder="Search their Destination..." onSelect={setCurrentExplicitly} />
+          </div>
         </div>
       )}
 

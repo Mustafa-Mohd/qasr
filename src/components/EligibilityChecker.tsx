@@ -43,6 +43,8 @@ export function EligibilityChecker() {
     setStayDays,
     error,
     result,
+    home,
+    current,
   } = useQasr();
   const rule = MADHABS[madhab];
   const [targetMode, setTargetMode] = useState<'self' | 'other'>('self');
@@ -122,6 +124,23 @@ export function EligibilityChecker() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
+          <div className="flex flex-col gap-2 rounded-2xl bg-secondary/30 p-4 border border-border">
+            <div className="flex items-center gap-2">
+              <Home className="h-4 w-4 shrink-0 text-primary" />
+              <span className="text-sm font-semibold shrink-0">From:</span>
+              <span className="text-sm text-muted-foreground truncate" title={home?.label || `${home?.lat.toFixed(4)}, ${home?.lng.toFixed(4)}`}>
+                {home?.label || `${home?.lat.toFixed(4)}, ${home?.lng.toFixed(4)}`}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 shrink-0 text-gold" />
+              <span className="text-sm font-semibold shrink-0">To:</span>
+              <span className="text-sm text-muted-foreground truncate" title={current?.label || `${current?.lat.toFixed(4)}, ${current?.lng.toFixed(4)}`}>
+                {current?.label || `${current?.lat.toFixed(4)}, ${current?.lng.toFixed(4)}`}
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-3 gap-3">
             <Stat label="Distance" value={formatDistance(result.distanceKm)} />
             <Stat label="Required" value={formatDistance(result.required)} />
