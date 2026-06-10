@@ -64,7 +64,7 @@ const formatPhotonResult = (properties: any) => {
   return Array.from(new Set(parts)).join(", ");
 };
 
-function LocationSearchInput({ placeholder, onSelect }: { placeholder: string, onSelect: (c: Coords) => void }) {
+export function LocationSearchInput({ placeholder, onSelect }: { placeholder: string, onSelect: (c: Coords) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);

@@ -15,6 +15,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScenariosRouteImport } from './routes/scenarios'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as QiblaRouteImport } from './routes/qibla'
+import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as NamesRouteImport } from './routes/names'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as KalimasRouteImport } from './routes/kalimas'
@@ -51,6 +52,11 @@ const QuranRoute = QuranRouteImport.update({
 const QiblaRoute = QiblaRouteImport.update({
   id: '/qibla',
   path: '/qibla',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NamesRoute = NamesRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/planner': typeof PlannerRoute
   '/qibla': typeof QiblaRoute
   '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/planner': typeof PlannerRoute
   '/qibla': typeof QiblaRoute
   '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/kalimas': typeof KalimasRoute
   '/knowledge': typeof KnowledgeRoute
   '/names': typeof NamesRoute
+  '/planner': typeof PlannerRoute
   '/qibla': typeof QiblaRoute
   '/quran': typeof QuranRoute
   '/scenarios': typeof ScenariosRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/planner'
     | '/qibla'
     | '/quran'
     | '/scenarios'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/planner'
     | '/qibla'
     | '/quran'
     | '/scenarios'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/kalimas'
     | '/knowledge'
     | '/names'
+    | '/planner'
     | '/qibla'
     | '/quran'
     | '/scenarios'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   KalimasRoute: typeof KalimasRoute
   KnowledgeRoute: typeof KnowledgeRoute
   NamesRoute: typeof NamesRoute
+  PlannerRoute: typeof PlannerRoute
   QiblaRoute: typeof QiblaRoute
   QuranRoute: typeof QuranRoute
   ScenariosRoute: typeof ScenariosRoute
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/qibla'
       fullPath: '/qibla'
       preLoaderRoute: typeof QiblaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/names': {
@@ -303,6 +323,7 @@ const rootRouteChildren: RootRouteChildren = {
   KalimasRoute: KalimasRoute,
   KnowledgeRoute: KnowledgeRoute,
   NamesRoute: NamesRoute,
+  PlannerRoute: PlannerRoute,
   QiblaRoute: QiblaRoute,
   QuranRoute: QuranRoute,
   ScenariosRoute: ScenariosRoute,

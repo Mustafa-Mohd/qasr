@@ -5,6 +5,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 const LINKS = [
   { to: "/", label: "Dashboard" },
+  { to: "/planner", label: "Trip Planner" },
   { to: "/guide", label: "Guide" },
   { to: "/names", label: "99 Names" },
   { to: "/duas", label: "Duas" },
